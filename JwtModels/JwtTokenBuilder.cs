@@ -13,6 +13,7 @@ namespace JwtTutorial.JwtModels
         private string subject = "";
         private string issuer = "";
         private string audience = "";
+        private string nameId = "";
         private Dictionary<string, string> claims = new Dictionary<string, string>();
         private int expiryInMinutes = 5;
 
@@ -40,6 +41,12 @@ namespace JwtTutorial.JwtModels
             return this;
         }
 
+        public JwtTokenBuilder AddNameId(string nameId)
+        {
+            this.nameId = nameId;
+            return this;
+        }
+
         public JwtTokenBuilder AddClaim(string type, string value)
         {
             this.claims.Add(type, value);
@@ -63,14 +70,15 @@ namespace JwtTutorial.JwtModels
             var claims = new List<Claim>
             {
               new Claim(JwtRegisteredClaimNames.Sub, this.subject),
-              new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+              new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+              new Claim("NameId", this.nameId)
             }
             .Union(this.claims.Select(item => new Claim(item.Key, item.Value)));
 
             var token = new JwtSecurityToken(
                               issuer: this.issuer,
                               audience: this.audience,
-                              claims: null,
+                              claims: claims,
                               expires: DateTime.UtcNow.AddMinutes(expiryInMinutes),
                               signingCredentials: new SigningCredentials(
                                                         this.securityKey,

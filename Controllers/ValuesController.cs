@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using JwtTutorial.JwtModels;
@@ -16,9 +17,9 @@ namespace JwtTutorial.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var name = User.Claims.Where(c => c.Issuer == "stephanybatista.com").First();
+            var name = User.Claims.First(c => c.Type == "NameId").Value;
             
-            return Json(new {Name = "AAA", Age = "3", UserName = name.Value});
+            return Json(name);
         }       
     }
 }

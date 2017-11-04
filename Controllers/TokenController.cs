@@ -22,6 +22,7 @@ namespace JwtTutorial.Controllers
                                 .AddSubject("Stehany Batista")
                                 .AddIssuer("stephanybatista.com")
                                 .AddAudience("stephanybatista.com")
+                                .AddNameId("salmeidabatista@gmail.com")
                                 .AddClaim("employeer", "31")
                                 .AddExpiry(1)
                                 .Build();
